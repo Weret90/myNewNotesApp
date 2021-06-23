@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.umbrella.noterecyclerview.R;
@@ -50,6 +51,12 @@ public class NotesFragment extends Fragment {
 
         NotesAdapter notesAdapter = new NotesAdapter();
         notesAdapter.setData(notes);
+        notesAdapter.setListener(new NotesAdapter.OnNoteClickListener() {
+            @Override
+            public void onNoteClickListener(@NonNull Note note) {
+                Toast.makeText(requireContext(), note.getId(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         notesList.setAdapter(notesAdapter);
 
