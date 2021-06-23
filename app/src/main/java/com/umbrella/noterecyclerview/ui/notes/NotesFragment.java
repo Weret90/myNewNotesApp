@@ -4,13 +4,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
@@ -40,7 +45,13 @@ public class NotesFragment extends Fragment {
 
         RecyclerView notesList = view.findViewById(R.id.notes_list);
         // notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        notesList.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
+        notesList.setLayoutManager(manager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), manager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_separator));
+
+        notesList.addItemDecoration(dividerItemDecoration);
+
         List<Note> notes = repository.getNotes();
 
         NotesAdapter notesAdapter = new NotesAdapter();
