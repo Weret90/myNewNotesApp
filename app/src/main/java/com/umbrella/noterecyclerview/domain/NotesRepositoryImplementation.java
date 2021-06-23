@@ -17,6 +17,11 @@ public class NotesRepositoryImplementation implements NotesRepository {
         notes.add(new Note("id5", "Title5", "https://cdn.pixabay.com/photo/2021/05/10/10/46/yellow-wall-6243164_960_720.jpg"));
         notes.add(new Note("id6", "Title6", "https://cdn.pixabay.com/photo/2020/05/12/16/16/raspberries-5163781_960_720.jpg"));
         notes.add(new Note("id7", "Title7", "https://cdn.pixabay.com/photo/2017/06/05/07/59/octopus-2373177_960_720.png"));
+
+        for (int i = 0; i < 1000; i++) {
+            notes.add(new Note("id" + (8 + i), "Title" + (8 + i), "https://cdn.pixabay.com/photo/2017/06/05/07/59/octopus-2373177_960_720.png"));
+        }
+
         return notes;
     }
 }
