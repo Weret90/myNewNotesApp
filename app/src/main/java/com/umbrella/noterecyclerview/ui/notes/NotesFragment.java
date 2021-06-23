@@ -6,22 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
+import com.umbrella.noterecyclerview.ui.MainActivity;
 
 import java.util.List;
 
@@ -54,7 +48,11 @@ public class NotesFragment extends Fragment {
         notesAdapter.setListener(new NotesAdapter.OnNoteClickListener() {
             @Override
             public void onNoteClickListener(@NonNull Note note) {
-                Toast.makeText(requireContext(), note.getId(), Toast.LENGTH_SHORT).show();
+                if (requireActivity() instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) requireActivity();
+                    mainActivity.getRouter().showNoteDetail(note);
+                }
+                // Toast.makeText(requireContext(), note.getId(), Toast.LENGTH_SHORT).show();
             }
         });
 

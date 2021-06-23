@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.umbrella.noterecyclerview.R;
+import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.ui.info.InfoFragment;
 import com.umbrella.noterecyclerview.ui.notes.NotesFragment;
 
@@ -21,5 +22,9 @@ public class MainRouter {
 
     public void showInfo() {
         fragmentManager.beginTransaction().replace(R.id.container, InfoFragment.newInstance(), InfoFragment.TAG).commit();
+    }
+
+    public void showNoteDetail(Note note) {
+        fragmentManager.beginTransaction().replace(R.id.container, NoteDetailsFragment.newInstance(note), NoteDetailsFragment.TAG).addToBackStack(NoteDetailsFragment.TAG).commit();
     }
 }

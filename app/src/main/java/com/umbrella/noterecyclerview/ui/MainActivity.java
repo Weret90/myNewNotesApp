@@ -11,13 +11,19 @@ import com.umbrella.noterecyclerview.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    private MainRouter router;
+
+    public MainRouter getRouter() {
+        return router;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        MainRouter router = new MainRouter(getSupportFragmentManager());
+        router = new MainRouter(getSupportFragmentManager());
 
         if(savedInstanceState == null) {
             router.showNotes();
