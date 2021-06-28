@@ -32,4 +32,8 @@ public class MainRouter {
     public void showEditNote(Note note) {
         fragmentManager.beginTransaction().replace(R.id.container, UpdateNoteFragment.newInstance(note), UpdateNoteFragment.TAG).addToBackStack(UpdateNoteFragment.TAG).commit();
     }
+
+    public void back() {
+        fragmentManager.popBackStack();
+    }
 }

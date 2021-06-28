@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
 import com.umbrella.noterecyclerview.ui.MainActivity;
 import com.umbrella.noterecyclerview.ui.MainRouter;
+import com.umbrella.noterecyclerview.update.UpdateNoteFragment;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +47,12 @@ public class NotesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        List<Note> notes = repository.getNotes();
+
         notesAdapter = new NotesAdapter(this);
+        notesAdapter.setData(notes);
+
         notesAdapter.setListener(new NotesAdapter.OnNoteClickedListener() {
             @Override
             public void onNoteClickedListener(@NonNull Note note) {
@@ -62,6 +69,17 @@ public class NotesFragment extends Fragment {
             public void onNoteLongClickedListener(Note note, int index) {
                 longClickedIndex = index;
                 longClickedNote = note;
+            }
+        });
+
+        getParentFragmentManager().setFragmentResultListener(UpdateNoteFragment.UPDATE_RESULT, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                if (result.containsKey(UpdateNoteFragment.ARG_NOTE)) {
+                    Note note = result.getParcelable(UpdateNoteFragment.ARG_NOTE);
+                    notesAdapter.update(note);
+                    notesAdapter.notifyItemChanged(longClickedIndex);
+                }
             }
         });
     }
@@ -110,10 +128,6 @@ public class NotesFragment extends Fragment {
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_separator));
 
         notesList.addItemDecoration(dividerItemDecoration);
-
-        List<Note> notes = repository.getNotes();
-
-        notesAdapter.setData(notes);
 
         notesList.setAdapter(notesAdapter);
 
