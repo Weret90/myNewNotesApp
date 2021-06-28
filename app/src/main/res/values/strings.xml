@@ -3,4 +3,8 @@
     <string name="action_notes">Notes</string>
     <string name="action_info">Info</string>
     <string name="notes_title">Notes</string>
+    <string name="action_add">Add</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_update">Update</string>
+    <string name="action_delete">Delete</string>
 </resources>
