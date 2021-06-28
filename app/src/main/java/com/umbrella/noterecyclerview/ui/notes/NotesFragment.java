@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.umbrella.noterecyclerview.R;
+import com.umbrella.noterecyclerview.RouterHolder;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
 import com.umbrella.noterecyclerview.ui.MainActivity;
+import com.umbrella.noterecyclerview.ui.MainRouter;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,9 +49,9 @@ public class NotesFragment extends Fragment {
         notesAdapter.setListener(new NotesAdapter.OnNoteClickedListener() {
             @Override
             public void onNoteClickedListener(@NonNull Note note) {
-                if (requireActivity() instanceof MainActivity) {
-                    MainActivity mainActivity = (MainActivity) requireActivity();
-                    mainActivity.getRouter().showNoteDetail(note);
+                if (requireActivity() instanceof RouterHolder) {
+                    MainRouter router = ((RouterHolder) requireActivity()).getMainRouter();
+                    router.showNoteDetail(note);
                 }
                 // Toast.makeText(requireContext(), note.getId(), Toast.LENGTH_SHORT).show();
             }
@@ -74,6 +77,11 @@ public class NotesFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         RecyclerView notesList = view.findViewById(R.id.notes_list);
+
+//        DefaultItemAnimator animator = new DefaultItemAnimator();
+//        animator.setAddDuration(5000L);
+//        animator.setRemoveDuration(7000L);
+//        notesList.setItemAnimator(animator);  длительность анимаций
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -136,6 +144,10 @@ public class NotesFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_update) {
+            if (requireActivity() instanceof RouterHolder) {
+                MainRouter router = ((RouterHolder) requireActivity()).getMainRouter();
+                router.showEditNote(longClickedNote);
+            }
             return true;
         }
         if (item.getItemId() == R.id.action_delete) {

@@ -3,22 +3,27 @@ package com.umbrella.noterecyclerview.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 public class Note implements Parcelable {
 
-    private String id;
+    private final String id;
     private String title;
-    private String url;
+    private final String url;
+    private Date date;
 
-    public Note(String id, String title, String url) {
+    public Note(String id, String title, String url, Date date) {
         this.id = id;
         this.title = title;
         this.url = url;
+        this.date = date;
     }
 
     protected Note(Parcel in) {
         id = in.readString();
         title = in.readString();
         url = in.readString();
+        date = new Date(in.readLong());
     }
 
     @Override
@@ -26,6 +31,7 @@ public class Note implements Parcelable {
         dest.writeString(id);
         dest.writeString(title);
         dest.writeString(url);
+        dest.writeLong(date.getTime());
     }
 
     @Override
@@ -55,5 +61,17 @@ public class Note implements Parcelable {
 
     public String getUrl() {
         return url;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

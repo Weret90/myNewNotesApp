@@ -7,6 +7,7 @@ import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.ui.info.InfoFragment;
 import com.umbrella.noterecyclerview.ui.notes.NotesFragment;
+import com.umbrella.noterecyclerview.update.UpdateNoteFragment;
 
 public class MainRouter {
 
@@ -26,5 +27,9 @@ public class MainRouter {
 
     public void showNoteDetail(Note note) {
         fragmentManager.beginTransaction().replace(R.id.container, NoteDetailsFragment.newInstance(note), NoteDetailsFragment.TAG).addToBackStack(NoteDetailsFragment.TAG).commit();
+    }
+
+    public void showEditNote(Note note) {
+        fragmentManager.beginTransaction().replace(R.id.container, UpdateNoteFragment.newInstance(note), UpdateNoteFragment.TAG).addToBackStack(UpdateNoteFragment.TAG).commit();
     }
 }
