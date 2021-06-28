@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface NotesRepository {
-    List<Note> getNotes();
+    void getNotes(Callback<List<Note>> callback);
 
     void clear();
 

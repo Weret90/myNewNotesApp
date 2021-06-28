@@ -1,14 +1,22 @@
 package com.umbrella.noterecyclerview.domain;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class NotesRepositoryImplementation implements NotesRepository {
 
     public static final NotesRepository INSTANCE = new NotesRepositoryImplementation();
-    ArrayList<Note> notes = new ArrayList<>();
+    private final ArrayList<Note> notes = new ArrayList<>();
+    private ExecutorService executor = Executors.newCachedThreadPool();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public NotesRepositoryImplementation() {
         notes.add(new Note("id1", "Title1", "https://cdn.pixabay.com/photo/2021/06/16/21/46/parrot-6342271_960_720.jpg", new Date()));
@@ -21,8 +29,23 @@ public class NotesRepositoryImplementation implements NotesRepository {
     }
 
     @Override
-    public List<Note> getNotes() {
-        return notes;
+    public void getNotes(Callback<List<Note>> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(notes);
+                    }
+                });
+            }
+        });
     }
 
     @Override

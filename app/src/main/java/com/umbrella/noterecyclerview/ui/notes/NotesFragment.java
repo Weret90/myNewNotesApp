@@ -18,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
+import com.umbrella.noterecyclerview.domain.Callback;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
@@ -28,6 +30,7 @@ import com.umbrella.noterecyclerview.ui.MainActivity;
 import com.umbrella.noterecyclerview.ui.MainRouter;
 import com.umbrella.noterecyclerview.update.UpdateNoteFragment;
 
+import java.sql.Struct;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +43,10 @@ public class NotesFragment extends Fragment {
     private int longClickedIndex;
     private Note longClickedNote;
 
+    private boolean isLoading = false;
+
+    private ProgressBar progressBar;
+
     public static NotesFragment newInstance() {
         return new NotesFragment();
     }
@@ -48,10 +55,23 @@ public class NotesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<Note> notes = repository.getNotes();
-
         notesAdapter = new NotesAdapter(this);
-        notesAdapter.setData(notes);
+
+        isLoading = true;
+
+        repository.getNotes(new Callback<List<Note>>() {
+            @Override
+            public void onSuccess(List<Note> result) {
+                notesAdapter.setData(result);
+                notesAdapter.notifyDataSetChanged();
+
+                isLoading = false;
+
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
 
         notesAdapter.setListener(new NotesAdapter.OnNoteClickedListener() {
             @Override
@@ -100,6 +120,11 @@ public class NotesFragment extends Fragment {
 //        animator.setAddDuration(5000L);
 //        animator.setRemoveDuration(7000L);
 //        notesList.setItemAnimator(animator);  длительность анимаций
+
+        progressBar = view.findViewById(R.id.progress);
+        if (isLoading) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
