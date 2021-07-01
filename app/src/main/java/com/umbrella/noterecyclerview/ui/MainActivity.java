@@ -8,8 +8,15 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.umbrella.noterecyclerview.R;
+import com.umbrella.noterecyclerview.RouterHolder;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RouterHolder {
+
+    private MainRouter router;
+
+//    public MainRouter getRouter() {
+//        return router;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        MainRouter router = new MainRouter(getSupportFragmentManager());
+        router = new MainRouter(getSupportFragmentManager());
 
         if(savedInstanceState == null) {
             router.showNotes();
@@ -36,5 +43,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public MainRouter getMainRouter() {
+        return router;
     }
 }
