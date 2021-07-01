@@ -131,10 +131,15 @@ public class NotesFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_add) {
-                    Note addNote = repository.add("This is new added Title", "https://cdn.pixabay.com/photo/2021/05/10/10/46/yellow-wall-6243164_960_720.jpg");
-                    int index = notesAdapter.add(addNote);
-                    notesAdapter.notifyItemInserted(index);  //обеспечивает анимацию при добавлении
-                    notesList.scrollToPosition(index);
+                    repository.add("This is new added Title", "https://cdn.pixabay.com/photo/2021/05/10/10/46/yellow-wall-6243164_960_720.jpg", new Callback<Note>() {
+                        @Override
+                        public void onSuccess(Note result) {
+                            int index = notesAdapter.add(result);
+                            notesAdapter.notifyItemInserted(index);  //обеспечивает анимацию при добавлении
+                            notesList.scrollToPosition(index);
+                        }
+                    });
+
                     return true;
                 }
                 if (item.getItemId() == R.id.action_clear) {
