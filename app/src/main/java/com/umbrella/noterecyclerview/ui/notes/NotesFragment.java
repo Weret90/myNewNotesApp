@@ -24,6 +24,7 @@ import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
 import com.umbrella.noterecyclerview.domain.Callback;
 import com.umbrella.noterecyclerview.domain.Note;
+import com.umbrella.noterecyclerview.domain.NotesFireStoreReporitory;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
 import com.umbrella.noterecyclerview.ui.MainActivity;
@@ -37,7 +38,7 @@ import java.util.List;
 public class NotesFragment extends Fragment {
 
     public static final String TAG = "NotesFragment";
-    private NotesRepository repository = NotesRepositoryImplementation.INSTANCE;
+    private NotesRepository repository = NotesFireStoreReporitory.INSTANCE;
     private NotesAdapter notesAdapter;
 
     private int longClickedIndex;

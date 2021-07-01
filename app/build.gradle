@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId "com.umbrella.noterecyclerview"
-        minSdkVersion 19
+        minSdkVersion 22
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -57,4 +57,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-firestore:23.0.0'
 }
