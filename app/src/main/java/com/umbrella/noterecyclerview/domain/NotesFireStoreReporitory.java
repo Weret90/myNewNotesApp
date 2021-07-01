@@ -32,7 +32,7 @@ public class NotesFireStoreReporitory implements NotesRepository {
     @Override
     public void getNotes(Callback<List<Note>> callback) {
         firebaseFirestore.collection(NOTES)
-                .orderBy(DATE, Query.Direction.DESCENDING)
+                .orderBy(DATE, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -84,8 +84,18 @@ public class NotesFireStoreReporitory implements NotesRepository {
     }
 
     @Override
-    public void remove(Note note) {
-
+    public void remove(Note note, Callback<Object> callback) {
+        firebaseFirestore.collection(NOTES)
+                .document(note.getId())
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            callback.onSuccess(note);
+                        }
+                    }
+                });
     }
 
     @Override

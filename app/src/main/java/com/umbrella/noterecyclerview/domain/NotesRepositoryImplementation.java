@@ -61,6 +61,12 @@ public class NotesRepositoryImplementation implements NotesRepository {
     }
 
     @Override
+    public void remove(Note note, Callback<Object> callback) {
+        notes.remove(note);
+        callback.onSuccess(note);
+    }
+
+    @Override
     public Note update(Note note, String title, Date date) {
         for (int i = 0; i < notes.size(); i++) {
             Note item = notes.get(i);
@@ -80,10 +86,5 @@ public class NotesRepositoryImplementation implements NotesRepository {
             }
         }
         return note;
-    }
-
-    @Override
-    public void remove(Note note) {
-        notes.remove(note);
     }
 }

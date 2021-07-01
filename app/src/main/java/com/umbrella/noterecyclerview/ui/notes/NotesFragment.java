@@ -196,9 +196,14 @@ public class NotesFragment extends Fragment {
             return true;
         }
         if (item.getItemId() == R.id.action_delete) {
-            repository.remove(longClickedNote);
-            notesAdapter.remove(longClickedNote);
-            notesAdapter.notifyItemRemoved(longClickedIndex);  //для анимации можно др ты знаешь)
+            repository.remove(longClickedNote, new Callback<Object>() {
+                @Override
+                public void onSuccess(Object result) {
+                    notesAdapter.remove(longClickedNote);
+                    notesAdapter.notifyItemRemoved(longClickedIndex);
+                }
+            });
+
             return true;
         }
         return super.onContextItemSelected(item);
