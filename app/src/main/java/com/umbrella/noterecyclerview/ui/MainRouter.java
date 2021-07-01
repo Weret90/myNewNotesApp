@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.domain.Note;
+import com.umbrella.noterecyclerview.ui.auth.AuthFragment;
 import com.umbrella.noterecyclerview.ui.info.InfoFragment;
 import com.umbrella.noterecyclerview.ui.notes.NotesFragment;
 import com.umbrella.noterecyclerview.update.UpdateNoteFragment;
@@ -19,6 +20,10 @@ public class MainRouter {
 
     public void showNotes() {
         fragmentManager.beginTransaction().replace(R.id.container, NotesFragment.newInstance(), NotesFragment.TAG).commit();
+    }
+
+    public void showAuth() {
+        fragmentManager.beginTransaction().replace(R.id.container, AuthFragment.newInstance(), AuthFragment.TAG).commit();
     }
 
     public void showInfo() {

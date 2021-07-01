@@ -2,6 +2,7 @@ package com.umbrella.noterecyclerview.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
+import com.umbrella.noterecyclerview.ui.auth.AuthFragment;
 
 public class MainActivity extends AppCompatActivity implements RouterHolder {
 
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements RouterHolder {
         router = new MainRouter(getSupportFragmentManager());
 
         if(savedInstanceState == null) {
-            router.showNotes();
+            router.showAuth();
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements RouterHolder {
                     router.showInfo();
                 }
                 return true;
+            }
+        });
+
+        getSupportFragmentManager().setFragmentResultListener(AuthFragment.AUTH_RESULT, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                router.showNotes();
             }
         });
     }
