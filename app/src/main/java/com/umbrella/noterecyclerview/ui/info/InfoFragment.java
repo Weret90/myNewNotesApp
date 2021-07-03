@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.umbrella.noterecyclerview.R;
 
@@ -33,6 +34,12 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getChildFragmentManager().setFragmentResultListener(AlertDialogFragment.RESULT, getViewLifecycleOwner(), new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                Toast.makeText(requireContext(), "Positive", Toast.LENGTH_SHORT).show();
+            }
+        });
         view.findViewById(R.id.alert_dialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +72,20 @@ public class InfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showCustomDialog();
+            }
+        });
+
+        view.findViewById(R.id.alert_dialog_fragment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialogFragment();
+            }
+        });
+
+        view.findViewById(R.id.dialog_fragment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogFragment();
             }
         });
     }
@@ -169,6 +190,17 @@ public class InfoFragment extends Fragment {
                     }
                 });
         builder.show();
+    }
+
+    public void showAlertDialogFragment() {
+        AlertDialogFragment.newInstance(R.string.alert_dialog_title)
+                .show(getChildFragmentManager(), CustomDialogFragment.TAG);
+
+    }
+
+    public void showDialogFragment() {
+        CustomDialogFragment.newInstance()
+                .show(getChildFragmentManager(), AlertDialogFragment.TAG);
     }
 }
 
