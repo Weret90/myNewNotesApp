@@ -1,14 +1,15 @@
 package com.umbrella.noterecyclerview.ui.notes;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
@@ -26,12 +28,9 @@ import com.umbrella.noterecyclerview.domain.Callback;
 import com.umbrella.noterecyclerview.domain.Note;
 import com.umbrella.noterecyclerview.domain.NotesFireStoreReporitory;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
-import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
-import com.umbrella.noterecyclerview.ui.MainActivity;
 import com.umbrella.noterecyclerview.ui.MainRouter;
 import com.umbrella.noterecyclerview.update.UpdateNoteFragment;
 
-import java.sql.Struct;
 import java.util.Collections;
 import java.util.List;
 
@@ -143,9 +142,7 @@ public class NotesFragment extends Fragment {
                     return true;
                 }
                 if (item.getItemId() == R.id.action_clear) {
-                    repository.clear();
-                    notesAdapter.setData(Collections.emptyList());
-                    notesAdapter.notifyDataSetChanged();
+                    showDeleteAllNotesAlertDialog();
                     return true;
                 }
                 return false;
@@ -196,16 +193,57 @@ public class NotesFragment extends Fragment {
             return true;
         }
         if (item.getItemId() == R.id.action_delete) {
-            repository.remove(longClickedNote, new Callback<Object>() {
-                @Override
-                public void onSuccess(Object result) {
-                    notesAdapter.remove(longClickedNote);
-                    notesAdapter.notifyItemRemoved(longClickedIndex);
-                }
-            });
-
+            showDeleteOneNoteAlertDialog();
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    public void showDeleteOneNoteAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.alert_dialog_delete)
+                .setMessage(R.string.alert_dialog_delete_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.btn_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.remove(longClickedNote, new Callback<Object>() {
+                            @Override
+                            public void onSuccess(Object result) {
+                                notesAdapter.remove(longClickedNote);
+                                notesAdapter.notifyItemRemoved(longClickedIndex);
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.btn_negative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(requireContext(), "Удаление отменено", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        builder.show();
+    }
+
+    private void showDeleteAllNotesAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.alert_dialog_delete_all)
+                .setMessage(R.string.alert_dialog_delete_all_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.btn_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.clear();
+                        notesAdapter.setData(Collections.emptyList());
+                        notesAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton(R.string.btn_negative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(requireContext(), "Удаление отменено", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        builder.show();
     }
 }
