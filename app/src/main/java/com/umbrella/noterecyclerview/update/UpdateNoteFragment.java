@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
 import com.umbrella.noterecyclerview.domain.Note;
+import com.umbrella.noterecyclerview.domain.NotesFireStoreReporitory;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
 import com.umbrella.noterecyclerview.ui.MainRouter;
@@ -28,7 +29,7 @@ public class UpdateNoteFragment extends Fragment {
     public static final String ARG_NOTE = "ARG_NOTE";
     public static final String TAG = "UpdateNoteFragment";
     public static final String UPDATE_RESULT = "UPDATE_RESULT";
-    private final NotesRepository repository = NotesRepositoryImplementation.INSTANCE;
+    private final NotesRepository repository = NotesFireStoreReporitory.INSTANCE;
     private int selectedYear = -1;
     private int selectedMonthYear = -1;
     private int selectedDayOfMonth = -1;

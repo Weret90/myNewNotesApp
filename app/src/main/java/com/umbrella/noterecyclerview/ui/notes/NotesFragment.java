@@ -24,6 +24,7 @@ import com.umbrella.noterecyclerview.R;
 import com.umbrella.noterecyclerview.RouterHolder;
 import com.umbrella.noterecyclerview.domain.Callback;
 import com.umbrella.noterecyclerview.domain.Note;
+import com.umbrella.noterecyclerview.domain.NotesFireStoreReporitory;
 import com.umbrella.noterecyclerview.domain.NotesRepository;
 import com.umbrella.noterecyclerview.domain.NotesRepositoryImplementation;
 import com.umbrella.noterecyclerview.ui.MainActivity;
@@ -37,7 +38,7 @@ import java.util.List;
 public class NotesFragment extends Fragment {
 
     public static final String TAG = "NotesFragment";
-    private NotesRepository repository = NotesRepositoryImplementation.INSTANCE;
+    private NotesRepository repository = NotesFireStoreReporitory.INSTANCE;
     private NotesAdapter notesAdapter;
 
     private int longClickedIndex;
@@ -130,10 +131,15 @@ public class NotesFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_add) {
-                    Note addNote = repository.add("This is new added Title", "https://cdn.pixabay.com/photo/2021/05/10/10/46/yellow-wall-6243164_960_720.jpg");
-                    int index = notesAdapter.add(addNote);
-                    notesAdapter.notifyItemInserted(index);  //обеспечивает анимацию при добавлении
-                    notesList.scrollToPosition(index);
+                    repository.add("This is new added Title", "https://cdn.pixabay.com/photo/2021/05/10/10/46/yellow-wall-6243164_960_720.jpg", new Callback<Note>() {
+                        @Override
+                        public void onSuccess(Note result) {
+                            int index = notesAdapter.add(result);
+                            notesAdapter.notifyItemInserted(index);  //обеспечивает анимацию при добавлении
+                            notesList.scrollToPosition(index);
+                        }
+                    });
+
                     return true;
                 }
                 if (item.getItemId() == R.id.action_clear) {
@@ -190,9 +196,14 @@ public class NotesFragment extends Fragment {
             return true;
         }
         if (item.getItemId() == R.id.action_delete) {
-            repository.remove(longClickedNote);
-            notesAdapter.remove(longClickedNote);
-            notesAdapter.notifyItemRemoved(longClickedIndex);  //для анимации можно др ты знаешь)
+            repository.remove(longClickedNote, new Callback<Object>() {
+                @Override
+                public void onSuccess(Object result) {
+                    notesAdapter.remove(longClickedNote);
+                    notesAdapter.notifyItemRemoved(longClickedIndex);
+                }
+            });
+
             return true;
         }
         return super.onContextItemSelected(item);
